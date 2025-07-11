@@ -3,6 +3,7 @@ const $form = document.querySelector("form");
 const $main = document.querySelector("main");
 const $loading = document.querySelector("#loading-screen")
 
+console.log("here we go")
 
 let teams = [];
 
@@ -163,6 +164,12 @@ $form.addEventListener("submit", async (e) => {
         hideLoading();
     }
 })
+
+const checkGit = () => {
+    console.log("here we go")
+}
+
+checkGit()
 
 init();
 // createPlayer("tobey","dachshund","https://www.vidavetcare.com/wp-content/uploads/sites/234/2022/04/dachshund-dog-breed-info.jpeg");
