@@ -1,4 +1,4 @@
-const API_URL = "https://fsa-puppy-bowl.herokuapp.com/api/2505-FTB-CT-WEB-PT";
+const API_URL = "https://fsa-puppy-bowl.herokuapp.com/api/2505-FTB-CT-WEB-PT-Shawn";
 const $form = document.querySelector("form");
 const $main = document.querySelector("main");
 const $loading = document.querySelector("#loading-screen")
@@ -16,7 +16,16 @@ function hideLoading () {
 }
 
 async function fetchAllPlayers () {
+  console.log("fetch players")
     try {
+      const full_API_URL = API_URL +"/players"
+      const response = await fetch(full_API_URL)
+      const allInfo = await response.json();
+      const allPlayersJSON = allInfo.data
+      console.log(full_API_URL)
+      console.log(allPlayersJSON)
+      return allPlayersJSON
+
         // see "Get all players"
     } catch (err) {
         console.error(err.message);
@@ -52,6 +61,7 @@ async function removePlayerById (id) {
 
 async function fetchAllTeams () {
     try {
+      console.log("fetching the team")
         // see "Get all teams"
     } catch (err) {
         console.error(err.message);
@@ -165,11 +175,6 @@ $form.addEventListener("submit", async (e) => {
     }
 })
 
-const checkGit = () => {
-    console.log("here we go")
-}
-
-checkGit()
 
 init();
 // createPlayer("tobey","dachshund","https://www.vidavetcare.com/wp-content/uploads/sites/234/2022/04/dachshund-dog-breed-info.jpeg");
