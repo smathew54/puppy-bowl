@@ -21,7 +21,7 @@ async function fetchAllPlayers () {
       const full_API_URL = API_URL +"/players"
       const response = await fetch(full_API_URL)
       const allInfo = await response.json();
-      const allPlayersJSON = allInfo.data
+      const allPlayersJSON = allInfo.data.players
       console.log(full_API_URL)
       console.log(allPlayersJSON)
       return allPlayersJSON
@@ -44,6 +44,15 @@ async function createPlayer (name, breed, imageUrl) {
 
 async function fetchPlayerById (id) {
     try {
+      console.log(`the id was ${id}`)
+      const initial_URL = API_URL +"/players/"
+      const full_API_URL = initial_URL + id
+      const response = await fetch(full_API_URL)
+      const allInfo = await response.json();
+
+      console.log(full_API_URL)
+      console.log(allInfo)
+      return(allInfo)
         // see "Get a player by ID"
     } catch (err) {
         console.error(err.message);
@@ -70,7 +79,12 @@ async function fetchAllTeams () {
 
 async function renderAllPlayers () {
     const playerList = await fetchAllPlayers();
-    // console.log(playerList);
+    console.log("time to render")
+    console.log(playerList)
+    playerList.forEach(player => {
+      console.log("I hit the inner loop")
+    })
+    console.log(playerList);
     const $players = document.createElement("ul");
     $players.id = "player-list";
     playerList.forEach(player => {
