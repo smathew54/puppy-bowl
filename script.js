@@ -36,7 +36,7 @@ async function createPlayer (name, breed, imageUrl) {
   obj = {
     name: name,
     breed: breed,
-    imageURL: imageUrl
+    imageUrl: imageUrl
   };
     try {
       const response = await fetch(API_URL + "/players",
@@ -48,7 +48,7 @@ async function createPlayer (name, breed, imageUrl) {
           body: JSON.stringify(obj),
         }
       );
-        return json.data.newPlayer;
+        return json.data.newPlayer; //do I need to return anything after a post
     } catch (err) {
         console.error(err.message);
     }
