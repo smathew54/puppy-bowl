@@ -33,9 +33,21 @@ async function fetchAllPlayers () {
 }
 
 async function createPlayer (name, breed, imageUrl) {
+  obj = {
+    name: name,
+    breed: breed,
+    imageURL: imageUrl
+  };
     try {
-        // see "Invite a new player"
-        // remember methods and headers
+      const response = await fetch(API_URL + "/players",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(obj),
+        }
+      );
         return json.data.newPlayer;
     } catch (err) {
         console.error(err.message);
@@ -49,10 +61,10 @@ async function fetchPlayerById (id) {
       const full_API_URL = initial_URL + id
       const response = await fetch(full_API_URL)
       const allInfo = await response.json();
-
-      console.log(full_API_URL)
+      const playerInfo = allInfo.data.player;
+      console.log(playerInfo)
       console.log(allInfo)
-      return(allInfo)
+      return(playerInfo)
         // see "Get a player by ID"
     } catch (err) {
         console.error(err.message);
@@ -60,9 +72,15 @@ async function fetchPlayerById (id) {
 }
 
 async function removePlayerById (id) {
+    const fullAPI = `${API_URL}/players/${id}`;
+    console.log(`delete player API ${fullAPI}`)
     try {
-        // see "Remove a player by ID"
-        // remember to set method
+      const fullAPI = `${API_URL}/players/${id}`;
+      console.log(fullAPI);
+      const response = await fetch(fullAPI,
+        {
+          method: "DELETE",
+        })
     } catch (err) {
         console.error(err.message);
     }
