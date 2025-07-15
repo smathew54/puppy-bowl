@@ -32,10 +32,11 @@ async function fetchAllPlayers () {
     }
 }
 
-async function createPlayer (name, breed, imageUrl) {
+async function createPlayer (name, breed, status, imageUrl) {
   obj = {
     name: name,
     breed: breed,
+    status: status,
     imageUrl: imageUrl
   };
     try {
@@ -159,6 +160,8 @@ async function renderSinglePlayer (id) {
     <section id="single-player">
         <h2>${player.name}/${player.team?.name || "Unassigned"} - ${player.status}</h2>
         <p>${player.breed}</p>
+        <p>${player.status}</p>
+        <p>${player.id}</p>
         <img src="${player.imageUrl}" alt="Picture of ${player.name}" />
         <button id="back-btn">Back to List</button>
     </section>
@@ -191,11 +194,12 @@ $form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.querySelector("#new-name").value;
     const breed = document.querySelector("#new-breed").value;
+    const status = document.querySelector("#new-status").value;
     const image = document.querySelector("#new-image").value;
     
     showLoading();
     try {
-        await createPlayer(name, breed, image);
+        await createPlayer(name, breed, status, image);
         renderAllPlayers();
     } catch (err) {
         console.error(err.message);
