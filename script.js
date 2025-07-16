@@ -1,4 +1,4 @@
-const API_URL = "https://fsa-puppy-bowl.herokuapp.com/api/2505-FTB-CT-WEB-PT";
+const API_URL = "https://fsa-puppy-bowl.herokuapp.com/api/2505-FTB-CT-WEB-PT-Shawn";
 const $form = document.querySelector("form");
 const $main = document.querySelector("main");
 const $loading = document.querySelector("#loading-screen")
@@ -16,18 +16,40 @@ function hideLoading () {
 }
 
 async function fetchAllPlayers () {
+  console.log("fetch players")
     try {
+      const full_API_URL = API_URL +"/players"
+      const response = await fetch(full_API_URL)
+      const allInfo = await response.json();
+      const allPlayersJSON = allInfo.data.players
+      console.log(full_API_URL)
+      console.log(allPlayersJSON)
+      return allPlayersJSON
+
         // see "Get all players"
     } catch (err) {
         console.error(err.message);
     }
 }
 
-async function createPlayer (name, breed, imageUrl) {
+async function createPlayer (name, breed, status, imageUrl) {
+  obj = {
+    name: name,
+    breed: breed,
+    status: status,
+    imageUrl: imageUrl
+  };
     try {
-        // see "Invite a new player"
-        // remember methods and headers
-        return json.data.newPlayer;
+      const response = await fetch(API_URL + "/players",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(obj),
+        }
+      );
+        return json.data.newPlayer; //do I need to return anything after a post
     } catch (err) {
         console.error(err.message);
     }
@@ -35,6 +57,15 @@ async function createPlayer (name, breed, imageUrl) {
 
 async function fetchPlayerById (id) {
     try {
+      console.log(`the id was ${id}`)
+      const initial_URL = API_URL +"/players/"
+      const full_API_URL = initial_URL + id
+      const response = await fetch(full_API_URL)
+      const allInfo = await response.json();
+      const playerInfo = allInfo.data.player;
+      console.log(playerInfo)
+      console.log(allInfo)
+      return(playerInfo)
         // see "Get a player by ID"
     } catch (err) {
         console.error(err.message);
@@ -42,9 +73,15 @@ async function fetchPlayerById (id) {
 }
 
 async function removePlayerById (id) {
+    const fullAPI = `${API_URL}/players/${id}`;
+    console.log(`delete player API ${fullAPI}`)
     try {
-        // see "Remove a player by ID"
-        // remember to set method
+      const fullAPI = `${API_URL}/players/${id}`;
+      console.log(fullAPI);
+      const response = await fetch(fullAPI,
+        {
+          method: "DELETE",
+        })
     } catch (err) {
         console.error(err.message);
     }
@@ -52,6 +89,7 @@ async function removePlayerById (id) {
 
 async function fetchAllTeams () {
     try {
+      console.log("fetching the team")
         // see "Get all teams"
     } catch (err) {
         console.error(err.message);
@@ -60,7 +98,12 @@ async function fetchAllTeams () {
 
 async function renderAllPlayers () {
     const playerList = await fetchAllPlayers();
-    // console.log(playerList);
+    console.log("time to render")
+    console.log(playerList)
+    playerList.forEach(player => {
+      console.log("I hit the inner loop")
+    })
+    console.log(playerList);
     const $players = document.createElement("ul");
     $players.id = "player-list";
     playerList.forEach(player => {
@@ -117,6 +160,8 @@ async function renderSinglePlayer (id) {
     <section id="single-player">
         <h2>${player.name}/${player.team?.name || "Unassigned"} - ${player.status}</h2>
         <p>${player.breed}</p>
+        <p>${player.status}</p>
+        <p>${player.id}</p>
         <img src="${player.imageUrl}" alt="Picture of ${player.name}" />
         <button id="back-btn">Back to List</button>
     </section>
@@ -149,11 +194,12 @@ $form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.querySelector("#new-name").value;
     const breed = document.querySelector("#new-breed").value;
+    const status = document.querySelector("#new-status").value;
     const image = document.querySelector("#new-image").value;
     
     showLoading();
     try {
-        await createPlayer(name, breed, image);
+        await createPlayer(name, breed, status, image);
         renderAllPlayers();
     } catch (err) {
         console.error(err.message);
@@ -165,11 +211,6 @@ $form.addEventListener("submit", async (e) => {
     }
 })
 
-const checkGit = () => {
-    console.log("here we go")
-}
-
-checkGit()
 
 init();
 // createPlayer("tobey","dachshund","https://www.vidavetcare.com/wp-content/uploads/sites/234/2022/04/dachshund-dog-breed-info.jpeg");
